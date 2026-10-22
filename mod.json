@@ -1,0 +1,139 @@
+{
+	"geode": "5.11.2",
+	"gd": {
+		"win": "2.2081"
+	},
+	"id": "community.input-buffer",
+	"name": "Input Buffer",
+	"version": "v4.0.0",
+	"developer": "Community",
+	"description": "Input buffer, trajectory preview, and click shifting so clicks register on the first safe tick.",
+	"tags": [
+		"gameplay",
+		"utility"
+	],
+	"settings": {
+		"buffer-title": {
+			"type": "title",
+			"name": "Input Buffer"
+		},
+		"enabled": {
+			"type": "bool",
+			"default": true,
+			"name": "Enable Input Buffer",
+			"description": "Tap jump slightly before landing and the jump comes out on the landing tick."
+		},
+		"buffer-window": {
+			"type": "int",
+			"default": 150,
+			"min": 10,
+			"max": 500,
+			"name": "Buffer Window (ms)",
+			"description": "How early you can tap before landing and still get the jump. At 240 physics ticks per second, 150 ms is about 36 ticks.",
+			"control": {
+				"slider": true,
+				"slider-step": 10,
+				"arrows": true,
+				"arrow-step": 10
+			}
+		},
+		"platformer-only": {
+			"type": "bool",
+			"default": false,
+			"name": "Platformer Levels Only",
+			"description": "Only buffer inputs in platformer levels."
+		},
+		"trajectory-title": {
+			"type": "title",
+			"name": "Trajectory"
+		},
+		"show-trajectory": {
+			"type": "bool",
+			"default": true,
+			"name": "Show Trajectory",
+			"description": "Draws two paths ahead of your icon. Green: where you go if you click now. Red: where you go if you don't click."
+		},
+		"trajectory-length": {
+			"type": "int",
+			"default": 1000,
+			"min": 200,
+			"max": 3000,
+			"name": "Trajectory Length (ms)",
+			"description": "How far ahead to predict. Longer is more expensive.",
+			"control": {
+				"slider": true,
+				"slider-step": 100,
+				"arrows": true,
+				"arrow-step": 100
+			}
+		},
+		"show-buffer-zone": {
+			"type": "bool",
+			"default": true,
+			"name": "Show Buffer Zone",
+			"description": "Highlights in yellow the part of the no-click path where an early tap will be caught by the buffer."
+		},
+		"trajectory-practice-only": {
+			"type": "bool",
+			"default": false,
+			"name": "Trajectory in Practice Only",
+			"description": "Only show the trajectory in practice mode."
+		},
+		"smart-title": {
+			"type": "title",
+			"name": "Click Shifting"
+		},
+		"smart-click": {
+			"type": "bool",
+			"default": true,
+			"name": "Enable Click Shifting",
+			"description": "When a click (or a release, in ship/wave/robot) would kill you and not doing it is safe, it's held back and registers on the first physics tick where it's safe. Turns itself off on orbs and while dashing."
+		},
+		"smart-max-delay": {
+			"type": "int",
+			"default": 150,
+			"min": 10,
+			"max": 500,
+			"name": "Max Delay (ms)",
+			"description": "How long a click can be held back. If it's still deadly after this, it's dropped.",
+			"control": {
+				"slider": true,
+				"slider-step": 10,
+				"arrows": true,
+				"arrow-step": 10
+			}
+		},
+		"smart-click-lookahead": {
+			"type": "int",
+			"default": 300,
+			"min": 50,
+			"max": 1000,
+			"name": "Lookahead (ms)",
+			"description": "How far ahead to check for death. Higher = safer but more cautious; lower = only reacts to deaths right in front of you.",
+			"control": {
+				"slider": true,
+				"slider-step": 25,
+				"arrows": true,
+				"arrow-step": 25
+			}
+		},
+		"auto-click": {
+			"type": "bool",
+			"default": false,
+			"name": "Auto Click",
+			"description": "Also clicks (or holds) for you when not clicking would kill you and clicking is safe. This plays for you: don't use it for verifying or rated runs."
+		},
+		"smart-click-practice-only": {
+			"type": "bool",
+			"default": false,
+			"name": "Practice Mode Only",
+			"description": "Only use Click Shifting / Auto Click in practice mode."
+		},
+		"smart-click-indicator": {
+			"type": "bool",
+			"default": true,
+			"name": "Show 'Smart Click' Label",
+			"description": "Shows a small label in the corner while Click Shifting or Auto Click is on."
+		}
+	}
+}
