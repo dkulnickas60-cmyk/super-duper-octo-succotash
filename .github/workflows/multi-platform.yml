@@ -1,0 +1,77 @@
+name: Build Geode Mod
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - name: Windows
+          os: windows-latest
+
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable error annotations
+        shell: bash
+        run: echo "::add-matcher::.github/problem-matcher.json"
+
+      - name: Build the mod
+        uses: geode-sdk/build-geode-mod@main
+        with:
+          bindings-ref: 1605f500d053f8de122bf5c7dc6d17c24866e02e
+          configure-args: -DSKIP_BUILDING_CODEGEN=OFF
+          combine: true
+          target: ${{ matrix.config.target }}
+
+      - name: Save build log on failure
+        if: failure()
+        shell: bash
+        run: |
+          cmake --build build --config Release -- -k 0 -j 1 > build-log.txt 2>&1 || true
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git checkout --orphan ci-logs
+          git rm -rf --cached . > /dev/null
+          git add -f build-log.txt
+          git commit -m "build log ${{ github.run_id }}"
+          git push -f origin ci-logs
+
+  package:
+    name: Package builds
+    runs-on: ubuntu-latest
+    needs: ['build']
+    permissions:
+      contents: write
+
+    steps:
+      - uses: geode-sdk/build-geode-mod/combine@main
+        id: build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Build Output
+          path: ${{ steps.build.outputs.build-output }}
+
+      - name: Save .geode to dist branch
+        shell: bash
+        run: |
+          mkdir dist && cp "${{ steps.build.outputs.build-output }}"/*.geode dist/
+          cd dist
+          git init -q -b dist
+          git config user.name "ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add -f *.geode
+          git commit -q -m "build ${{ github.run_id }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" dist
