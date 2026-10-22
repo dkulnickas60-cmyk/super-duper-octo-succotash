@@ -1,0 +1,31 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "ib-clang-msvc",
+      "pattern": [
+        {
+          "regexp": "^(.*?)\\((\\d+),(\\d+)\\):\\s+(error|fatal error)\\s*:?\\s*(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      ]
+    },
+    {
+      "owner": "ib-clang",
+      "pattern": [
+        {
+          "regexp": "^(.*?):(\\d+):(\\d+):\\s+(error|fatal error):\\s+(.*)$",
+          "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+        }
+      ]
+    },
+    {
+      "owner": "ib-generic",
+      "pattern": [
+        {
+          "regexp": "^.*((?:CMake Error|\\[error\\]|Error:|error:|LINK : |fatal error)).*$",
+          "message": 0
+        }
+      ]
+    }
+  ]
+}
